@@ -13,7 +13,6 @@ html, body {
     background: black;
 }
 
-
 canvas {
     position: fixed;
     inset: 0;
@@ -23,7 +22,6 @@ canvas {
     z-index: 1;
 }
 
-
 #text-layer {
     position: fixed;
     inset: 0;
@@ -31,26 +29,31 @@ canvas {
     z-index: 2;
 }
 
-
 .falling-text {
     position: absolute;
-    top: -40px;
+    top: -50px;
     color: #ff9bbd;
     font-size: 22px;
     font-family: Arial, sans-serif;
     white-space: nowrap;
     animation: fall linear forwards;
+    text-shadow: 0 0 10px rgba(255,150,180,.8);
 }
 
 @keyframes fall {
     to {
-        transform: translateY(110vh);
+        transform: translateY(120vh);
         opacity: 0;
     }
 }
 </style>
 </head>
 <body>
+
+<!-- Thay nhạc nền ở đây nhé 👇 ! -->
+<audio id="bg-music" autoplay loop>
+    <source src="https://files.catbox.moe/dxgpat.mp4" type="audio/mp3">
+</audio>
 
 <canvas id="heart"></canvas>
 <div id="text-layer"></div>
@@ -217,30 +220,47 @@ if (document.readyState === 'complete' ||
 else document.addEventListener('DOMContentLoaded', init, false);
 </script>
 
-
+<!--Thay câu hỏi hoặc lời yêu thương của bạn vào đây nhé !-->
 <script>
 const texts = [
-    "I Love You ❤️",
-    "Forever 💞",
-    "Tên ny bạn",
-    "Only You ✨"
+    "Anh yêu em rất nhiều ❤️",
+    "Chúc em luôn vui vẻ mỗi ngày 💖",
+    "Dù thế nào anh vẫn ở đây",
+    "Yêu em hơn cả bản thân mình 💕",
+    "Mãi bên nhau nhé 💞"
 ];
 
 const layer = document.getElementById("text-layer");
+const SAFE = 25;
 
 function createText() {
     const el = document.createElement("div");
     el.className = "falling-text";
-    el.textContent = texts[Math.floor(Math.random() * texts.length)];
-    el.style.left = Math.random() * 100 + "vw";
-    el.style.fontSize = 18 + Math.random() * 14 + "px";
-    el.style.animationDuration = 6 + Math.random() * 6 + "s";
+    el.textContent = texts[Math.floor(Math.random()*texts.length)];
+    el.style.fontSize = 18 + Math.random()*12 + "px";
+    el.style.animationDuration = 6 + Math.random()*6 + "s";
+
+    el.style.left = "50%";
     layer.appendChild(el);
+
+    const w = el.offsetWidth;
+    const maxX = window.innerWidth - w - SAFE;
+    const x = Math.max(SAFE, Math.random() * maxX);
+
+    el.style.left = x + "px";
     el.addEventListener("animationend", () => el.remove());
 }
 
-setInterval(createText, 400);
+setInterval(createText, 450);
+</script>
+
+
+<script>
+const music = document.getElementById("bg-music");
+document.addEventListener("click", () => {
+    if (music.paused) music.play();
+});
 </script>
 
 </body>
-</html>
+    </html>
