@@ -29,21 +29,24 @@ canvas{
     inset:0;
     pointer-events:none;
     z-index:10;
-    perspective:800px;
 }
 
 .falling-text{
     position:absolute;
-    top:-60px;
+    top:-70px;
     font-family:'Dancing Script',cursive;
+    font-size:22px;
+    color:#ff9bbd;
     white-space:nowrap;
     text-shadow:0 0 12px rgba(255,150,180,.85);
     animation:fall linear forwards;
-    transform-style:preserve-3d;
 }
 
 @keyframes fall{
-    to{transform:translateY(120vh);opacity:0}
+    to{
+        transform:translateY(120vh);
+        opacity:0;
+    }
 }
 </style>
 </head>
@@ -56,6 +59,7 @@ canvas{
 <canvas id="heart"></canvas>
 <div id="text-layer"></div>
 
+<!-- ===== TRÁI TIM NGUYÊN BẢN – GIỮ 100% ===== -->
 <script>
 window.requestAnimationFrame =
 window.__requestAnimationFrame ||
@@ -64,15 +68,15 @@ window.webkitRequestAnimationFrame ||
 window.mozRequestAnimationFrame ||
 window.oRequestAnimationFrame ||
 window.msRequestAnimationFrame ||
-(function(){
- return function(callback,element){
-  var lastTime=element.__lastTime;
-  if(lastTime===undefined)lastTime=0;
-  var currTime=Date.now();
-  var timeToCall=Math.max(1,33-(currTime-lastTime));
-  window.setTimeout(callback,timeToCall);
-  element.__lastTime=currTime+timeToCall;
- };
+(function () {
+    return function (callback, element) {
+        var lastTime = element.__lastTime;
+        if (lastTime === undefined) lastTime = 0;
+        var currTime = Date.now();
+        var timeToCall = Math.max(1, 33 - (currTime - lastTime));
+        window.setTimeout(callback, timeToCall);
+        element.__lastTime = currTime + timeToCall;
+    };
 })();
 
 window.isDevice=(/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i
@@ -143,13 +147,15 @@ var e=[];
 for(i=0;i<heartPointsCount;i++){
  var x=rand()*width;
  var y=rand()*height;
- e[i]={vx:0,vy:0,R:2,speed:rand()+5,
+ e[i]={
+  vx:0,vy:0,R:2,speed:rand()+5,
   q:~~(rand()*heartPointsCount),
   D:2*(i%2)-1,
   force:0.2*rand()+0.7,
   f:"hsla(0,"+~~(40*rand()+60)+"%,"+
     ~~(60*rand()+20)+"%,.3)",
-  trace:[]};
+  trace:[]
+ };
  for(var k=0;k<traceCount;k++)
   e[i].trace[k]={x:x,y:y};
 }
@@ -211,64 +217,47 @@ if(document.readyState==='complete'||
 else addEventListener('DOMContentLoaded',init,false);
 </script>
 
+<!-- ===== MƯA CHỮ – KHÔNG TRÙNG – KHÔNG CHẠM LỀ ===== -->
 <script>
 const texts=[
- "Anh yêu em 😘",
- "Em làm ny anh nhé",
- "Mỗi ngày có em là hạnh phúc",
+ "Anh yêu em rất nhiều 😘",
+ "Em làm người yêu anh nhé 💖",
+ "Có em là điều tuyệt vời nhất",
  "Yêu em hơn cả bản thân mình"
 ];
 
 const layer=document.getElementById("text-layer");
-const SAFE=40;
-const COLS=6;
-const active=Array(COLS).fill(false);
-
-let rx=0,ry=0;
-
-addEventListener("mousemove",e=>{
- rx=(e.clientX/innerWidth-.5)*25;
- ry=(e.clientY/innerHeight-.5)*-25;
-});
-addEventListener("touchmove",e=>{
- const t=e.touches[0];
- if(!t)return;
- rx=(t.clientX/innerWidth-.5)*25;
- ry=(t.clientY/innerHeight-.5)*-25;
-},{passive:true});
+const SAFE=80;
+const active=new Set();
 
 function createText(){
- let col=active.indexOf(false);
- if(col===-1)return;
- active[col]=true;
+ const text=texts[Math.floor(Math.random()*texts.length)];
+ if(active.has(text))return;
+
+ active.add(text);
 
  const el=document.createElement("div");
  el.className="falling-text";
- el.textContent=texts[Math.floor(Math.random()*texts.length)];
- el.style.fontSize=22+"px";
- el.style.color=`hsl(${Math.random()*360},80%,75%)`;
- el.style.animationDuration=4.5+"s";
-
- const w=(innerWidth-SAFE*2)/COLS;
- el.style.left=SAFE+w*col+w/2+"px";
- el.style.transform="translateX(-50%)";
+ el.textContent=text;
+ el.style.animationDuration=(5+Math.random()*3)+"s";
 
  layer.appendChild(el);
 
- (function tilt(){
-  el.style.transform=
-   `translateX(-50%) rotateY(${rx}deg) rotateX(${ry}deg)`;
-  requestAnimationFrame(tilt);
- })();
+ const w=el.offsetWidth;
+ const maxX=innerWidth-SAFE-w;
+ const x=Math.max(SAFE,Math.random()*maxX);
+ el.style.left=x+"px";
 
  el.addEventListener("animationend",()=>{
-  active[col]=false;
+  active.delete(text);
   el.remove();
  });
 }
 
-setInterval(createText,380);
+setInterval(createText,350);
+</script>
 
+<script>
 const music=document.getElementById("bg-music");
 addEventListener("click",()=>{if(music.paused)music.play();});
 </script>
