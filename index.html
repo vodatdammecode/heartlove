@@ -5,8 +5,6 @@
 <title>Heart Love</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
-
 <style>
 html, body {
     margin: 0;
@@ -36,7 +34,7 @@ canvas {
     top: -50px;
     color: #ff9bbd;
     font-size: 22px;
-    font-family: 'Dancing Script', cursive;
+    font-family: Arial, sans-serif;
     white-space: nowrap;
     animation: fall linear forwards;
     text-shadow: 0 0 10px rgba(255,150,180,.8);
@@ -52,12 +50,14 @@ canvas {
 </head>
 <body>
 
+<!-- Thay nhạc nền ở đây nhé 👇 ! -->
 <audio id="bg-music" autoplay loop>
     <source src="https://files.catbox.moe/dxgpat.mp4" type="audio/mp3">
 </audio>
 
 <canvas id="heart"></canvas>
 <div id="text-layer"></div>
+
 
 <script>
 window.requestAnimationFrame =
@@ -220,13 +220,14 @@ if (document.readyState === 'complete' ||
 else document.addEventListener('DOMContentLoaded', init, false);
 </script>
 
+<!--Thay câu hỏi hoặc lời yêu thương của bạn vào đây nhé !-->
 <script>
 const texts = [
     "Anh yêu em rất nhiều ❤️",
     "Chúc em luôn vui vẻ mỗi ngày 💖",
     "Dù thế nào anh vẫn ở đây",
     "Yêu em hơn cả bản thân mình 💕",
-    
+    "Mãi bên nhau nhé 💞"
 ];
 
 const layer = document.getElementById("text-layer");
@@ -252,6 +253,7 @@ function createText() {
 
 setInterval(createText, 450);
 </script>
+
 
 <script>
 const music = document.getElementById("bg-music");
